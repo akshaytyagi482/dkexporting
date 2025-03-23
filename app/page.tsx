@@ -1,10 +1,10 @@
-"use client"
+"use client";
 import { ArrowRight } from "lucide-react";
 import ProductCard from "@/components/product-card";
 import ServiceCard from "@/components/service-card";
 import FeatureCard from "@/components/feature-card";
-import { World } from "@/components/ui/globe";
-import { GlobeConfig } from "@/components/ui/globe";
+import dynamic from "next/dynamic"; // Add this
+import { GlobeConfig } from "@/components/ui/globe"; // Keep this for type
 import Slider from "@/components/Slider";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
@@ -16,45 +16,53 @@ import Image from "next/image";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger, TextPlugin);
 
+const World = dynamic(() => import("@/components/ui/globe").then((mod) => mod.World), {
+  ssr: false, 
+});
+
 export default function Home() {
   const textRef = useRef(null);
-  const text = 'DK EXPORTING'
-  useGSAP(() => {
-    gsap.fromTo(
-      ".letter",
-      { y: "1.1em", opacity: 0 },
-      {
-        y: 0,
-        opacity: 1,
-        delay:0.4,
-        duration: 0.75,
-        stagger: 0.05,
-        ease: "power2.out",
-      }
-    );
-  }, []);
- 
-  useGSAP(() => {
-    gsap.from(".subh",{
-       x:-20,
-       delay:0.6,
-       duration:0.5,
-       opacity:0
-    });
-    gsap.from(".desc",{
-      x:-20,
-      delay:0.7,
-      duration:0.5,
-      opacity:0
-   });
+  const text = 'DK EXPORTING';
 
-   gsap.fromTo(".but",{ 
-    opacity:0,
-   },{
-    opacity:1,
-    delay:0.8,
-    duration:0.5,
-   });
+  useGSAP(() => {
+    if (typeof window !== "undefined") {
+      gsap.fromTo(
+        ".letter",
+        { y: "1.1em", opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          delay: 0.4,
+          duration: 0.75,
+          stagger: 0.05,
+          ease: "power2.out",
+        }
+      );
+    }
+  }, []);
+
+  useGSAP(() => {
+    if (typeof window !== "undefined") {
+      gsap.from(".subh", {
+        x: -20,
+        delay: 0.6,
+        duration: 0.5,
+        opacity: 0
+      });
+      gsap.from(".desc", {
+        x: -20,
+        delay: 0.7,
+        duration: 0.5,
+        opacity: 0
+      });
+      gsap.fromTo(".but", {
+        opacity: 0,
+      }, {
+        opacity: 1,
+        delay: 0.8,
+        duration: 0.5,
+      });
+    }
   }, []);
 
   const globeConfig: GlobeConfig = {
@@ -96,11 +104,11 @@ export default function Home() {
           <div className="max-w-3xl lg:text-left text-center z-10">
             <h1 ref={textRef} className="ml6 text-4xl md:text-6xl font-bold text-green-800 dark:text-green-100 mb-4">
               <span className="text-wrapper">
-              {text.split("").map((char, index) => (
-                <span key={index} className="letter inline-block">
-                  {char === " " ? "\u00A0" : char}
-                </span>
-              ))}
+                {text.split("").map((char, index) => (
+                  <span key={index} className="letter inline-block">
+                    {char === " " ? "\u00A0" : char}
+                  </span>
+                ))}
               </span>
             </h1>
             <p className="text-xl md:text-2xl subh text-green-800 dark:text-green-200 mb-8">

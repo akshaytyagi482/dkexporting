@@ -44,12 +44,14 @@ export default function Navbar() {
   };
 
   useEffect(() => {
-    gsap.from(".nacb", {
-      y: -50,
-      opacity: 0,
-      duration: 0.8,
-      delay: 0.5,
-    });
+    if (typeof window !== "undefined") { // Added guard
+      gsap.from(".nacb", {
+        y: -50,
+        opacity: 0,
+        duration: 0.8,
+        delay: 0.5,
+      });
+    }
   }, []);
 
   const navLinks = [
