@@ -108,7 +108,7 @@ export function Globe({ globeConfig, data }: WorldProps) {
         isNaN(d.endLat) ||
         isNaN(d.endLng) ||
         isNaN(d.arcAlt) ||
-        typeof d.color !== "string"
+        typeof d.color !== "string" // Check for non-string colors
     );
     if (invalidData.length > 0) {
       console.error("Found invalid data entries: ", invalidData);
@@ -139,14 +139,15 @@ export function Globe({ globeConfig, data }: WorldProps) {
 
   const _buildData = () => {
     const arcs = data;
-    const points = []; // Changed from let to const
+    let points = [];
     for (let i = 0; i < arcs.length; i++) {
       const arc = arcs[i];
+      // Ensure color is a string, default to red if invalid
       const color = typeof arc.color === "string" ? arc.color : "#ff0000";
       const rgb = hexToRgb(color);
       if (!rgb) {
         console.warn(`Invalid color for arc at index ${i}: ${arc.color}, using default #ff0000`);
-        continue;
+        continue; // Skip if color is still invalid
       }
       if (
         isNaN(arc.startLat) ||
@@ -214,9 +215,9 @@ export function Globe({ globeConfig, data }: WorldProps) {
         .arcStartLng((d) => (d as { startLng: number }).startLng * 1)
         .arcEndLat((d) => (d as { endLat: number }).endLat * 1)
         .arcEndLng((d) => (d as { endLng: number }).endLng * 1)
-        .arcColor((e: Position) => { 
-          const color = e.color;
-          return typeof color === "string" ? color : "#ff0000";
+        .arcColor((e: any) => {
+          const color = (e as { color: string }).color;
+          return typeof color === "string" ? color : "#ff0000"; // Fallback to red
         })
         .arcAltitude((e) => (e as { arcAlt: number }).arcAlt * 1)
         .arcStroke(() => [0.32, 0.28, 0.3][Math.round(Math.random() * 2)])
@@ -229,7 +230,7 @@ export function Globe({ globeConfig, data }: WorldProps) {
         .pointsData(globeData.filter((p) => !isNaN(p.lat) && !isNaN(p.lng)))
         .pointColor((e) => {
           const color = (e as { color: string }).color;
-          return typeof color === "string" ? color : "#ff0000";
+          return typeof color === "string" ? color : "#ff0000"; // Fallback to red
         })
         .pointsMerge(true)
         .pointAltitude(0.0)
@@ -237,9 +238,9 @@ export function Globe({ globeConfig, data }: WorldProps) {
 
       globeRef.current
         .ringsData([])
-        .ringColor((e: { color: (t: number) => string }) => (t: number) => { // Replaced any with specific types
+        .ringColor((e: any) => (t: any) => {
           const color = e.color(t);
-          return typeof color === "string" ? color : "#ff0000";
+          return typeof color === "string" ? color : "#ff0000"; // Fallback to red
         })
         .ringMaxRadius(defaultProps.maxRings)
         .ringPropagationSpeed(RING_PROPAGATION_SPEED)
@@ -325,6 +326,7 @@ export function World(props: WorldProps) {
 }
 
 export function hexToRgb(hex: string): { r: number; g: number; b: number } | null {
+  // Ensure hex is a string, return null if not
   if (typeof hex !== "string") {
     console.warn(`hexToRgb received non-string input: ${hex}`);
     return null;
