@@ -1,0 +1,114 @@
+<% if (locals.action) {
+  // Make it possible to override action button color (specify fallback color if no color specified)
+  locals.action.forEach(function(actionItem) {
+    actionItem.button.forEach(function(button) {
+        // Make it possible to override action button color (specify fallback color if no color specified)
+        if (!button.color) {
+            button.color = 'blue';
+        }
+
+        deprecatedColorToHex(button);
+      });
+  });
+
+// Convert deprecated red/green/blue action button color to hex since we switched to a hex-based button color
+function deprecatedColorToHex(button) {
+    if (button.color === 'red') {
+          button.color = '#DC4D2F';
+    }
+    else if (button.color === 'green') {
+          button.color = '#22BC66';
+    }
+    else if (button.color === 'blue') {
+          button.color = '#3869D4';
+    }
+}
+} %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<style type="text/css" rel="stylesheet" media="all">
+  /* Base ------------------------------ */
+  *:not(br):not(tr):not(html) {
+    font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+  }
+  body {
+    width: 100% !important;
+    height: 100%;
+    margin: 0;
+    line-height: 1.4;
+    background-color: #F2F4F6;
+    color: #74787E;
+    -webkit-text-size-adjust: none;
+  }
+  a {
+    color: #3869D4;
+  }
+
+  /* Layout ------------------------------ */
+  .email-wrapper {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: #F2F4F6;
+  }
+  .email-content {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+</style>
+</head>
+<body dir="<%- textDirection %>">
+<table class="email-wrapper" width="100%" cellpadding="0" cellspacing="0">
+  <tr>
+    <td align="center">
+      <table class="email-content" width="100%" cellpadding="0" cellspacing="0">
+        <!-- Email Body -->
+        <tr>
+          <td class="email-body" width="100%">
+            <table class="email-body_inner" align="center" width="570" cellpadding="0" cellspacing="0">
+              <!-- Body content -->
+              <tr>
+                <td class="content-cell">
+                  <% if (locals.title) { %>
+                    <h1><%- title %></h1>
+                  <% } %>
+                  <% if (locals.intro) { %>
+                    <% intro.forEach(function (introItem) { -%>
+                      <p><%- introItem %></p>
+                    <% }) -%>
+                  <% } %>
+                  <% if (locals.outro) { %>
+                    <% outro.forEach(function (outroItem) { -%>
+                      <p><%- outroItem %></p>
+                    <% }) -%>
+                  <% } %>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <table class="email-footer" align="center" width="570" cellpadding="0" cellspacing="0">
+              <tr>
+                <td class="content-cell">
+                  <p class="sub center">
+                    <%- product.copyright %>
+                  </p>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+</body>
+</html>
