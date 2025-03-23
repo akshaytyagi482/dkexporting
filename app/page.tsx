@@ -1,6 +1,5 @@
 "use client"
-import { Mail, Phone, Globe as GlobeIcon, ArrowRight, Loader } from "lucide-react";
-import ContactForm from "@/components/contact-form";
+import { ArrowRight } from "lucide-react";
 import ProductCard from "@/components/product-card";
 import ServiceCard from "@/components/service-card";
 import FeatureCard from "@/components/feature-card";
@@ -9,15 +8,13 @@ import { GlobeConfig } from "@/components/ui/globe";
 import Slider from "@/components/Slider";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
-    
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { TextPlugin } from "gsap/TextPlugin";
 import { useRef } from "react";
-import { CustomEase } from "gsap/all";
 import Link from "next/link";
+import Image from "next/image";
 
-
-gsap.registerPlugin(useGSAP,ScrollTrigger,TextPlugin);
+gsap.registerPlugin(useGSAP, ScrollTrigger, TextPlugin);
 
 export default function Home() {
   const textRef = useRef(null);
@@ -31,16 +28,13 @@ export default function Home() {
         opacity: 1,
         delay:0.4,
         duration: 0.75,
-        stagger: 0.05, // Stagger for each letter
+        stagger: 0.05,
         ease: "power2.out",
       }
     );
-}, []);
+  }, []);
  
   useGSAP(() => {
-    // const words = textRef.current.children; // Select each word
-   
-    
     gsap.from(".subh",{
        x:-20,
        delay:0.6,
@@ -56,12 +50,11 @@ export default function Home() {
 
    gsap.fromTo(".but",{ 
     opacity:0,
- },{
-  opacity:1,
-  delay:0.8,
+   },{
+    opacity:1,
+    delay:0.8,
     duration:0.5,
- });
- 
+   });
   }, []);
 
   const globeConfig: GlobeConfig = {
@@ -101,14 +94,15 @@ export default function Home() {
         <div className="container mx-auto px-4 py-20 lg:pt-0 flex flex-col lg:flex-row justify-center items-center gap-12">
           {/* Text Content */}
           <div className="max-w-3xl lg:text-left text-center z-10">
-            <h1 ref={textRef}  className="ml6 text-4xl md:text-6xl font-bold text-green-800 dark:text-green-100 mb-4">
+            <h1 ref={textRef} className="ml6 text-4xl md:text-6xl font-bold text-green-800 dark:text-green-100 mb-4">
               <span className="text-wrapper">
               {text.split("").map((char, index) => (
-        <span key={index} className="letter inline-block">
-          {char === " " ? "\u00A0" : char}
-        </span>
-      ))}
-        </span></h1>
+                <span key={index} className="letter inline-block">
+                  {char === " " ? "\u00A0" : char}
+                </span>
+              ))}
+              </span>
+            </h1>
             <p className="text-xl md:text-2xl subh text-green-800 dark:text-green-200 mb-8">
               Your Trusted Partner in Global Trade
             </p>
@@ -136,7 +130,13 @@ export default function Home() {
           <div className="flex flex-col md:flex-row items-center gap-12">
             <div className="md:w-1/2">
               <div className="relative rounded-2xl overflow-hidden shadow-xl">
-                <img src="/about.png" alt="About DK Exporting" className="w-full h-auto" />
+                <Image 
+                  src="/about.png" 
+                  alt="About DK Exporting" 
+                  width={600}
+                  height={400}
+                  className="w-full h-auto"
+                />
               </div>
             </div>
             <div className="md:w-1/2">
@@ -171,10 +171,10 @@ export default function Home() {
                 </div>
               </div>
               <Link href="/about">
-              <button className="bg-green-600 hover:bg-green-700 buttones text-white px-6 py-3 rounded-full flex items-center gap-2 transition-all">
-                Learn More About Us
-                <ArrowRight size={18} />
-              </button>
+                <button className="bg-green-600 hover:bg-green-700 buttones text-white px-6 py-3 rounded-full flex items-center gap-2 transition-all">
+                  Learn More About Us
+                  <ArrowRight size={18} />
+                </button>
               </Link>
             </div>
           </div>

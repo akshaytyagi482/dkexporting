@@ -2,34 +2,30 @@
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
+import Image from "next/image" // Added Next.js Image import
 import { Menu, X } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { gsap } from "gsap";
-import { useGSAP } from "@gsap/react";
-    
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { TextPlugin } from "gsap/TextPlugin";
+import { gsap } from "gsap"
+import { useGSAP } from "@gsap/react"
+import { ScrollTrigger } from "gsap/ScrollTrigger"
+import { TextPlugin } from "gsap/TextPlugin"
 
-
-gsap.registerPlugin(useGSAP,ScrollTrigger,TextPlugin);
+gsap.registerPlugin(useGSAP, ScrollTrigger, TextPlugin)
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
 
-
   useGSAP(() => {
-    // const words = textRef.current.children; // Select each word
-
     gsap.from(
       ".nacb",
       { 
         y: -50,
         opacity: 0,
         duration: 0.8,
-        delay:0.5
-        }
-    );
+        delay: 0.5
+      }
+    )
   }, [])
 
   // Handle scroll effect for navbar
@@ -87,7 +83,13 @@ export default function Navbar() {
                 isScrolled ? "text-green-700 dark:text-green-400" : "text-green-700 dark:text-white",
               )}
             >
-              <img src="/realogo.png" className="w-14 rounded-full" alt="" />
+              <Image 
+                src="/realogo.png" 
+                className="w-14 rounded-full" 
+                alt="DK Exporting Logo"
+                width={56} // Assuming w-14 = 56px (14 * 4 based on Tailwind's default rem)
+                height={56} // Assuming a square logo
+              />
             </span>
           </Link>
 
@@ -160,4 +162,3 @@ export default function Navbar() {
     </header>
   )
 }
-

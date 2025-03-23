@@ -1,6 +1,6 @@
 import React from 'react'
 import ContactForm from './contact-form'
-import { GlobeIcon, Mail, Phone } from 'lucide-react'
+import { Mail, Phone } from 'lucide-react'
 
 const Contactus = () => {
   return (
