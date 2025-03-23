@@ -1,62 +1,56 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import Link from "next/link"
-import Image from "next/image" // Added Next.js Image import
-import { Menu, X } from "lucide-react"
-import { cn } from "@/lib/utils"
-import { gsap } from "gsap"
-import { useGSAP } from "@gsap/react"
-import { ScrollTrigger } from "gsap/ScrollTrigger"
-import { TextPlugin } from "gsap/TextPlugin"
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import Image from "next/image";
+import { Menu, X } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { TextPlugin } from "gsap/TextPlugin";
 
-gsap.registerPlugin(useGSAP, ScrollTrigger, TextPlugin)
+gsap.registerPlugin(ScrollTrigger, TextPlugin);
 
 export default function Navbar() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const [isScrolled, setIsScrolled] = useState(false)
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
 
-  useGSAP(() => {
-    gsap.from(
-      ".nacb",
-      { 
-        y: -50,
-        opacity: 0,
-        duration: 0.8,
-        delay: 0.5
-      }
-    )
-  }, [])
-
-  // Handle scroll effect for navbar
   useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 10) {
-        setIsScrolled(true)
-      } else {
-        setIsScrolled(false)
-      }
+    if (typeof window !== "undefined") {
+      const handleScroll = () => {
+        setIsScrolled(window.scrollY > 10);
+      };
+
+      window.addEventListener("scroll", handleScroll);
+      return () => window.removeEventListener("scroll", handleScroll);
     }
+  }, []);
 
-    window.addEventListener("scroll", handleScroll)
-    return () => window.removeEventListener("scroll", handleScroll)
-  }, [])
-
-  // Close menu when clicking outside on mobile
   useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth > 768) {
-        setIsMenuOpen(false)
-      }
-    }
+    if (typeof window !== "undefined") {
+      const handleResize = () => {
+        if (window.innerWidth > 768) {
+          setIsMenuOpen(false);
+        }
+      };
 
-    window.addEventListener("resize", handleResize)
-    return () => window.removeEventListener("resize", handleResize)
-  }, [])
+      window.addEventListener("resize", handleResize);
+      return () => window.removeEventListener("resize", handleResize);
+    }
+  }, []);
 
   const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen)
-  }
+    setIsMenuOpen(!isMenuOpen);
+  };
+
+  useEffect(() => {
+    gsap.from(".nacb", {
+      y: -50,
+      opacity: 0,
+      duration: 0.8,
+      delay: 0.5,
+    });
+  }, []);
 
   const navLinks = [
     { name: "Home", href: "/" },
@@ -64,33 +58,30 @@ export default function Navbar() {
     { name: "Products", href: "/#products" },
     { name: "Services", href: "/#services" },
     { name: "Contact", href: "#contact" },
-  ]
+  ];
 
   return (
     <header
       className={cn(
         "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
-        isScrolled ? "bg-white/90 dark:bg-gray-900/90 backdrop-blur-md shadow-md py-3" : "bg-transparent py-5",
+        isScrolled
+          ? "bg-white/90 dark:bg-gray-900/90 backdrop-blur-md shadow-md py-3"
+          : "bg-transparent py-5"
       )}
     >
       <div className="container nacb mx-auto px-4">
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center">
-            <span
-              className={cn(
-                "text-xl font-bold transition-colors",
-                isScrolled ? "text-green-700 dark:text-green-400" : "text-green-700 dark:text-white",
-              )}
-            >
-              <Image 
-                src="/realogo.png" 
-                className="w-14 rounded-full" 
+            <div className="w-14 h-14 rounded-full overflow-hidden">
+              <Image
+                src="/realogo.png"
                 alt="DK Exporting Logo"
-                width={56} // Assuming w-14 = 56px (14 * 4 based on Tailwind's default rem)
-                height={56} // Assuming a square logo
+                width={56}
+                height={56}
+                priority
               />
-            </span>
+            </div>
           </Link>
 
           {/* Desktop Navigation */}
@@ -101,7 +92,9 @@ export default function Navbar() {
                 href={link.href}
                 className={cn(
                   "text-sm font-medium transition-colors hover:text-green-600 dark:hover:text-green-400",
-                  isScrolled ? "text-gray-700 dark:text-gray-200" : "text-gray-700 dark:text-white",
+                  isScrolled
+                    ? "text-gray-700 dark:text-gray-200"
+                    : "text-gray-700 dark:text-white"
                 )}
               >
                 {link.name}
@@ -135,7 +128,7 @@ export default function Navbar() {
             "md:hidden fixed inset-x-0 bg-white dark:bg-gray-800 transition-all duration-300 ease-in-out overflow-hidden shadow-lg",
             isMenuOpen
               ? "max-h-[400px] opacity-100 translate-y-0 border-b border-gray-200 dark:border-gray-700"
-              : "max-h-0 opacity-0 -translate-y-4",
+              : "max-h-0 opacity-0 -translate-y-4"
           )}
         >
           <nav className="flex flex-col space-y-4 p-6">
@@ -160,5 +153,5 @@ export default function Navbar() {
         </div>
       </div>
     </header>
-  )
+  );
 }
